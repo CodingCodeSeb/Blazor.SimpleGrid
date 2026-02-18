@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/Blazor.SimpleGrid/Blazor.SimpleGrid.csproj" />
+  <Project Path="tests/Blazor.SimpleGrid.Test/Blazor.SimpleGrid.Test.csproj" />
+</Solution>
