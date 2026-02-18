@@ -21,27 +21,26 @@ jobs:
 
       - name: Fix for GitHub Pages
         run: |
-          # 1. Base Href in der index.html anpassen
-          # Wir suchen die index.html dynamisch, falls der Pfad leicht abweicht
-          INDEX_PATH=$(find output/wwwroot -name "index.html")
-          echo "Found index.html at: $INDEX_PATH"
-          sed -i 's|<base href=".*" />|<base href="/Blazor.SimpleGrid/" />|g' "$INDEX_PATH"
-
-          # 2. Integritätsprüfung deaktivieren (Sucht die boot.json automatisch)
-          # Wir suchen nach jeder .json Datei, die mit 'blazor.boot' beginnt
-          BOOT_JSON=$(find output/wwwroot -name "blazor.boot.json")
+          # Pfad finden
+          INDEX_PATH="output/wwwroot/index.html"
           
+          echo "Patche index.html unter $INDEX_PATH"
+          
+          # Wir ersetzen ALLES was im base href steht durch den Repo-Namen.
+          # WICHTIG: Achte darauf, dass hier EXAKT dein Repo-Name steht (Groß/Kleinschreibung!)
+          sed -i 's|<base href="[^"]*" />|<base href="/Blazor.SimpleGrid/" />|g' "$INDEX_PATH"
+          
+          # Falls deine index.html das Format <base href="/"> ohne Leerzeichen nutzt:
+          sed -i 's|<base href="[^"]*">|<base href="/Blazor.SimpleGrid/">|g' "$INDEX_PATH"
+
+          # Integrität deaktivieren (für die 404er nicht primär, aber wichtig für danach)
+          BOOT_JSON=$(find output/wwwroot -name "blazor.boot.json")
           if [ -f "$BOOT_JSON" ]; then
-            echo "Found boot.json at: $BOOT_JSON - Disabling integrity..."
             sed -i 's/"sha256-[^"]*"/"sha256-ignore"/g' "$BOOT_JSON"
-          else
-            echo "Warning: blazor.boot.json not found, skipping integrity fix."
-            # Falls die Datei nicht existiert, listen wir zur Sicherheit den Inhalt auf
-            ls -R output/wwwroot/_framework
           fi
 
-          # 3. 404.html erstellen
-          cp "$INDEX_PATH" "output/wwwroot/404.html"
+          # 404 fix
+          cp "$INDEX_PATH" output/wwwroot/404.html
 
       - name: Upload to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
