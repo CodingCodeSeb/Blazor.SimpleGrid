@@ -18,16 +18,22 @@ jobs:
       - name: Publish Sample Project
         run: dotnet publish samples/Blazor.SimpleGrid.Sample/Blazor.SimpleGrid.Sample.csproj -c Release -o release
 
-      # WICHTIG: Korrektur für GitHub Pages Unterpfade (Base-Tag)
+      # Wir suchen die index.html jetzt direkt im gesamten release-Ordner
       - name: Change base-tag in index.html
-        run: sed -i 's/<base href="\/" \/>/<base href="\/Blazor.SimpleGrid.Sample\/" \/>/g' release/wwwroot/index.html
+        run: |
+          FILE_PATH=$(find release -name index.html)
+          echo "Found index.html at: $FILE_PATH"
+          sed -i 's/<base href="\/" \/>/<base href="\/Blazor.SimpleGrid\/" \/>/g' $FILE_PATH
 
-      # Fix für 404 Fehler beim Neuladen
+      # Auch hier suchen wir die Datei dynamisch, um sie als 404.html zu kopieren
       - name: Copy index.html to 404.html
-        run: cp release/wwwroot/index.html release/wwwroot/404.html
+        run: |
+          FILE_PATH=$(find release -name index.html)
+          DIR_PATH=$(dirname $FILE_PATH)
+          cp $FILE_PATH "$DIR_PATH/404.html"
 
       - name: Upload to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: release/wwwroot
+          folder: release/wwwroot # Falls dotnet publish den Ordner so erstellt
           branch: gh-pages
