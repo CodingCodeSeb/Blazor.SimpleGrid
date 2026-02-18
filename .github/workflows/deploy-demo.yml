@@ -30,6 +30,7 @@ jobs:
           
           # 404 fix
           cp output/wwwroot/index.html output/wwwroot/404.html
+          touch output/wwwroot/.nojekyll
 
       - name: Upload to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
