@@ -16,24 +16,30 @@ jobs:
           dotnet-version: 10.0.x # Dotnet version anpassen
 
       - name: Publish Sample Project
-        run: dotnet publish samples/Blazor.SimpleGrid.Sample/Blazor.SimpleGrid.Sample.csproj -c Release -o release
+        # Wir erzwingen hier den Output-Pfad absolut sauber
+        run: dotnet publish samples/Blazor.SimpleGrid.Sample/Blazor.SimpleGrid.Sample.csproj -c Release -o output
 
-      # Wir suchen die index.html jetzt direkt im gesamten release-Ordner
-      - name: Change base-tag in index.html
-        run: |
-          FILE_PATH=$(find release -name index.html)
-          echo "Found index.html at: $FILE_PATH"
-          sed -i 's/<base href="\/" \/>/<base href="\/Blazor.SimpleGrid\/" \/>/g' $FILE_PATH
+      - name: Debug Output (Optional)
+        # Dieser Schritt zeigt dir im Log genau, wo die Dateien gelandet sind
+        run: ls -R output
 
-      # Auch hier suchen wir die Datei dynamisch, um sie als 404.html zu kopieren
-      - name: Copy index.html to 404.html
+      - name: Fix Paths for GitHub Pages
         run: |
-          FILE_PATH=$(find release -name index.html)
-          DIR_PATH=$(dirname $FILE_PATH)
-          cp $FILE_PATH "$DIR_PATH/404.html"
+          # Wir wissen, dass Blazor WASM die index.html in wwwroot ablegt
+          INDEX_FILE="output/wwwroot/index.html"
+          
+          if [ -f "$INDEX_FILE" ]; then
+            echo "Korrektur der index.html wird ausgeführt..."
+            # Ersetze REPO_NAME durch deinen exakten GitHub-Repo-Namen
+            sed -i 's/<base href="\/" \/>/<base href="\/Blazor.SimpleGrid\/" \/>/g' "$INDEX_FILE"
+            cp "$INDEX_FILE" "output/wwwroot/404.html"
+          else
+            echo "FEHLER: index.html wurde nicht unter $INDEX_FILE gefunden!"
+            exit 1
+          fi
 
       - name: Upload to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: release/wwwroot # Falls dotnet publish den Ordner so erstellt
+          folder: output/wwwroot # Wir laden nur den Inhalt von wwwroot hoch
           branch: gh-pages
