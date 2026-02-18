@@ -1,0 +1,145 @@
+﻿@page "/"
+@using Blazor.SimpleGrid.Components
+@using Blazor.SimpleGrid.Enums
+
+<PageTitle>SimpleGrid Showcase</PageTitle>
+
+<div class="sg-demo-wrapper">
+    <header class="sg-header">
+        <h1>Blazor.SimpleGrid Showcase</h1>
+        <p>Eine leichte Grid-Library für moderne Blazor-Apps.</p>
+    </header>
+
+    <section class="sg-section">
+        <h2>1. Einfaches Spalten-Layout</h2>
+        <div class="sg-preview">
+            <SimpleGrid Columns="1fr 1fr 1fr" Gap="15px">
+                <SimpleGridItem><div class="sg-box">1</div></SimpleGridItem>
+                <SimpleGridItem><div class="sg-box">2</div></SimpleGridItem>
+                <SimpleGridItem><div class="sg-box">3</div></SimpleGridItem>
+            </SimpleGrid>
+        </div>
+        <div class="sg-code">
+            <pre><code>&lt;SimpleGrid Columns="1fr 1fr 1fr" Gap="15px"&gt;
+    &lt;SimpleGridItem&gt;1&lt;/SimpleGridItem&gt;
+    &lt;SimpleGridItem&gt;2&lt;/SimpleGridItem&gt;
+    &lt;SimpleGridItem&gt;3&lt;/SimpleGridItem&gt;
+&lt;/SimpleGrid&gt;</code></pre>
+        </div>
+    </section>
+
+    <section class="sg-section">
+        <h2>2. Holy Grail Layout (Template Areas)</h2>
+        <div class="sg-preview">
+            <SimpleGrid Columns="150px 1fr 150px" 
+                        TemplateAreas="header header header | nav main side | footer footer footer" 
+                        Gap="8px">
+                
+                <SimpleGridItem Area="header"><div class="sg-box header">Header</div></SimpleGridItem>
+                <SimpleGridItem Area="nav"><div class="sg-box nav">Nav</div></SimpleGridItem>
+                <SimpleGridItem Area="main"><div class="sg-box main">Main Content</div></SimpleGridItem>
+                <SimpleGridItem Area="side"><div class="sg-box side">Side</div></SimpleGridItem>
+                <SimpleGridItem Area="footer"><div class="sg-box footer">Footer</div></SimpleGridItem>
+            </SimpleGrid>
+        </div>
+        <div class="sg-code">
+            <pre><code>&lt;SimpleGrid Columns="150px 1fr 150px" 
+            TemplateAreas="header header header | nav main side | footer footer footer" 
+            Gap="8px"&gt;
+            
+    &lt;SimpleGridItem Area="header"&gt;&lt;div class="sg-box header"&gt;Header&lt;/div&gt;&lt;/SimpleGridItem&gt;
+    &lt;SimpleGridItem Area="nav"&gt;&lt;div class="sg-box nav"&gt;Nav&lt;/div&gt;&lt;/SimpleGridItem&gt;
+    &lt;SimpleGridItem Area="main"&gt;&lt;div class="sg-box main"&gt;Main Content&lt;/div&gt;&lt;/SimpleGridItem&gt;
+    &lt;SimpleGridItem Area="side"&gt;&lt;div class="sg-box side"&gt;Side&lt;/div&gt;&lt;/SimpleGridItem&gt;
+    &lt;SimpleGridItem Area="footer"&gt;&lt;div class="sg-box footer"&gt;Footer&lt;/div&gt;&lt;/SimpleGridItem&gt;
+&lt;/SimpleGrid&gt;</code></pre>
+        </div>
+    </section>
+    <section class="sg-section">
+        <h2>3. Responsive Grid (Auto-Resize)</h2>
+        <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">
+            Verkleinere das Browserfenster, um zu sehen, wie die Spalten automatisch umbrechen.
+        </p>
+        <div class="sg-preview">
+            <SimpleGrid Columns="repeat(auto-fill, minmax(200px, 1fr))" Gap="15px">
+                <SimpleGridItem><div class="sg-box">Card 1</div></SimpleGridItem>
+                <SimpleGridItem><div class="sg-box">Card 2</div></SimpleGridItem>
+                <SimpleGridItem><div class="sg-box">Card 3</div></SimpleGridItem>
+                <SimpleGridItem><div class="sg-box">Card 4</div></SimpleGridItem>
+            </SimpleGrid>
+        </div>
+        <div class="sg-code">
+            <pre><code>&lt;!-- Die Spalten passen sich automatisch der Container-Breite an --&gt;
+&lt;SimpleGrid Columns="repeat(auto-fill, minmax(200px, 1fr))" Gap="15px"&gt;
+    &lt;SimpleGridItem&gt;&lt;div class="sg-box"&gt;Card 1&lt;/div&gt;&lt;/SimpleGridItem&gt;
+    &lt;SimpleGridItem&gt;&lt;div class="sg-box"&gt;Card 2&lt;/div&gt;&lt;/SimpleGridItem&gt;
+    &lt;SimpleGridItem&gt;&lt;div class="sg-box"&gt;Card 3&lt;/div&gt;&lt;/SimpleGridItem&gt;
+    &lt;SimpleGridItem&gt;&lt;div class="sg-box"&gt;Card 4&lt;/div&gt;&lt;/SimpleGridItem&gt;
+&lt;/SimpleGrid&gt;</code></pre>
+        </div>
+    </section>
+
+</div>
+
+<style>
+    /* Scope-Präfix "sg-" verhindert Konflikte mit dem Blazor-MainLayout */
+    .sg-demo-wrapper {
+        padding: 2rem;
+        max-width: 1000px;
+        margin: 0 auto;
+        color: #333;
+    }
+
+    .sg-header {
+        margin-bottom: 3rem;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 1rem;
+    }
+
+    .sg-section {
+        margin-bottom: 4rem;
+    }
+
+    .sg-section h2 {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+        color: #555;
+    }
+
+    /* Container für die Live-Vorschau */
+    .sg-preview {
+        background: #fafafa;
+        padding: 20px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px 8px 0 0;
+    }
+
+    /* Styling für die Boxen im Grid */
+    .sg-box {
+        background: white;
+        border: 1px solid #3b82f6;
+        color: #3b82f6;
+        padding: 15px;
+        text-align: center;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+
+    .sg-box.header { background: #3b82f6; color: white; }
+    .sg-box.nav { background: #eff6ff; }
+    .sg-box.main { min-height: 120px; display: flex; align-items: center; justify-content: center; }
+    .sg-box.footer { background: #1e293b; color: white; border-color: #1e293b; }
+
+    /* Styling für den Code-Block unter der Vorschau */
+    .sg-code {
+        background: #282c34;
+        color: #abb2bf;
+        padding: 15px;
+        border-radius: 0 0 8px 8px;
+        font-family: 'Cascadia Code', Consolas, monospace;
+        font-size: 0.9rem;
+        overflow-x: auto;
+    }
+
+    .sg-code pre { margin: 0; }
+</style>

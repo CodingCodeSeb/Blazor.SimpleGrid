@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="samples/Blazor.SimpleGrid.Sample/Blazor.SimpleGrid.Sample.csproj" Id="14d6fa95-a808-41b8-bd58-88b2b1eb6fa8" />
+  <Project Path="samples/Blazor.SimpleGrid.WasmSample/Blazor.SimpleGrid.WasmSample.csproj" Id="a4ce7dfe-6557-41c0-8df4-8c622b554479" />
   <Project Path="src/Blazor.SimpleGrid/Blazor.SimpleGrid.csproj" />
   <Project Path="tests/Blazor.SimpleGrid.Test/Blazor.SimpleGrid.Test.csproj" />
 </Solution>

@@ -2,7 +2,7 @@ name: Deploy Demo to GitHub Pages
 
 on:
   push:
-    branches: [ master ] # Oder dein primärer Branch-Name
+    branches: [ main ]
 
 jobs:
   deploy:
@@ -13,33 +13,31 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 10.0.x # Dotnet version anpassen
+          dotnet-version: 10.0.x # Oder 9.0.x, je nach deinem Projekt
 
-      - name: Publish Sample Project
-        # Wir erzwingen hier den Output-Pfad absolut sauber
-        run: dotnet publish samples/Blazor.SimpleGrid.Sample/Blazor.SimpleGrid.Sample.csproj -c Release -o output
+      - name: Publish WASM Project
+        # Hier den Pfad zu deinem NEUEN Projekt anpassen:
+        run: dotnet publish samples/Blazor.SimpleGrid.WasmSample/Blazor.SimpleGrid.WasmSample.csproj -c Release -o output
 
-      - name: Debug Output (Optional)
-        # Dieser Schritt zeigt dir im Log genau, wo die Dateien gelandet sind
-        run: ls -R output
-
-      - name: Fix Paths for GitHub Pages
+      - name: Fix for GitHub Pages
         run: |
-          # Wir wissen, dass Blazor WASM die index.html in wwwroot ablegt
+          # Pfad zur index.html im WASM-Output
           INDEX_FILE="output/wwwroot/index.html"
           
           if [ -f "$INDEX_FILE" ]; then
-            echo "Korrektur der index.html wird ausgeführt..."
-            # Ersetze REPO_NAME durch deinen exakten GitHub-Repo-Namen
+            echo "Patche index.html für GitHub Pages..."
+            # WICHTIG: Ersetze 'Blazor.SimpleGrid' durch deinen Repo-Namen auf GitHub
             sed -i 's/<base href="\/" \/>/<base href="\/Blazor.SimpleGrid\/" \/>/g' "$INDEX_FILE"
+            
+            # Kopiere index.html zu 404.html, damit Deep-Links (wie /demo) funktionieren
             cp "$INDEX_FILE" "output/wwwroot/404.html"
           else
-            echo "FEHLER: index.html wurde nicht unter $INDEX_FILE gefunden!"
+            echo "FEHLER: index.html nicht gefunden. Prüfe den Pfad!"
             exit 1
           fi
 
       - name: Upload to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: output/wwwroot # Wir laden nur den Inhalt von wwwroot hoch
+          folder: output/wwwroot
           branch: gh-pages
