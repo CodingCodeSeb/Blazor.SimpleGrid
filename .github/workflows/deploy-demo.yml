@@ -1,0 +1,33 @@
+name: Deploy Demo to GitHub Pages
+
+on:
+  push:
+    branches: [ main ] # Oder dein primärer Branch-Name
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 10.0.x # Dotnet version anpassen
+
+      - name: Publish Sample Project
+        run: dotnet publish samples/Blazor.SimpleGrid.Sample/Blazor.SimpleGrid.Sample.csproj -c Release -o release
+
+      # WICHTIG: Korrektur für GitHub Pages Unterpfade (Base-Tag)
+      - name: Change base-tag in index.html
+        run: sed -i 's/<base href="\/" \/>/<base href="\/Blazor.SimpleGrid\/" \/>/g' release/wwwroot/index.html
+
+      # Fix für 404 Fehler beim Neuladen
+      - name: Copy index.html to 404.html
+        run: cp release/wwwroot/index.html release/wwwroot/404.html
+
+      - name: Upload to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: release/wwwroot
+          branch: gh-pages
