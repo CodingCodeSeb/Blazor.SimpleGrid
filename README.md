@@ -1,7 +1,7 @@
 # Blazor.SimpleGrid
 
 ![Build Status](https://github.com/CodingCodeSeb/Blazor.SimpleGrid/actions/workflows/dotnet-ci.yml/badge.svg)
-![NuGet Version](https://img.shields.io/nuget/v/Blazor.SimpleGrid)
+![NuGet Version](https://img.shields.io/nuget/v/Blazor.SimpleGridComponent)
 ![License](https://img.shields.io/github/license/CodingCodeSeb/Blazor.SimpleGrid)
 
 A modern, lightweight Blazor component library for creating **CSS Grid Layouts**. Define complex structures directly in Razor syntax without writing manual CSS.
@@ -21,7 +21,7 @@ A modern, lightweight Blazor component library for creating **CSS Grid Layouts**
 ## Installation
 
 1. Install the package via NuGet:
-   `dotnet add package Blazor.SimpleGrid`
+   `dotnet add package Blazor.SimpleGridComponent`
 
 2. Add the namespace to your _Imports.razor:
    `@using Blazor.SimpleGrid.Components`
