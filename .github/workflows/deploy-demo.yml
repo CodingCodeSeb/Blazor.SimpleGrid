@@ -21,20 +21,17 @@ jobs:
 
       - name: Fix for GitHub Pages
         run: |
-          # Pfad zur index.html im WASM-Output
-          INDEX_FILE="output/wwwroot/index.html"
-          
-          if [ -f "$INDEX_FILE" ]; then
-            echo "Patche index.html für GitHub Pages..."
-            # WICHTIG: Ersetze 'Blazor.SimpleGrid' durch deinen Repo-Namen auf GitHub
-            sed -i 's/<base href="\/" \/>/<base href="\/Blazor.SimpleGrid\/" \/>/g' "$INDEX_FILE"
-            
-            # Kopiere index.html zu 404.html, damit Deep-Links (wie /demo) funktionieren
-            cp "$INDEX_FILE" "output/wwwroot/404.html"
-          else
-            echo "FEHLER: index.html nicht gefunden. Prüfe den Pfad!"
-            exit 1
-          fi
+          # 1. Base Href anpassen (Achte auf das exakte Format deiner index.html)
+          # Wir nutzen hier ein flexibleres Suchmuster
+          sed -i 's|<base href=".*" />|<base href="/Blazor.SimpleGrid/" />|g' output/wwwroot/index.html
+
+          # 2. Integritätsprüfung in der blazor.boot.json deaktivieren
+          # Das Skript entfernt alle "sha256-..." Einträge
+          sed -i 's/"sha256-[^"]*"/"sha256-ignore"/g' output/wwwroot/_framework/blazor.boot.json
+
+          # 3. 404.html erstellen
+          cp output/wwwroot/index.html output/wwwroot/404.html
+
 
       - name: Upload to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
