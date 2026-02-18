@@ -21,17 +21,27 @@ jobs:
 
       - name: Fix for GitHub Pages
         run: |
-          # 1. Base Href anpassen (Achte auf das exakte Format deiner index.html)
-          # Wir nutzen hier ein flexibleres Suchmuster
-          sed -i 's|<base href=".*" />|<base href="/Blazor.SimpleGrid/" />|g' output/wwwroot/index.html
+          # 1. Base Href in der index.html anpassen
+          # Wir suchen die index.html dynamisch, falls der Pfad leicht abweicht
+          INDEX_PATH=$(find output/wwwroot -name "index.html")
+          echo "Found index.html at: $INDEX_PATH"
+          sed -i 's|<base href=".*" />|<base href="/Blazor.SimpleGrid/" />|g' "$INDEX_PATH"
 
-          # 2. Integritätsprüfung in der blazor.boot.json deaktivieren
-          # Das Skript entfernt alle "sha256-..." Einträge
-          sed -i 's/"sha256-[^"]*"/"sha256-ignore"/g' output/wwwroot/_framework/blazor.boot.json
+          # 2. Integritätsprüfung deaktivieren (Sucht die boot.json automatisch)
+          # Wir suchen nach jeder .json Datei, die mit 'blazor.boot' beginnt
+          BOOT_JSON=$(find output/wwwroot -name "blazor.boot.json")
+          
+          if [ -f "$BOOT_JSON" ]; then
+            echo "Found boot.json at: $BOOT_JSON - Disabling integrity..."
+            sed -i 's/"sha256-[^"]*"/"sha256-ignore"/g' "$BOOT_JSON"
+          else
+            echo "Warning: blazor.boot.json not found, skipping integrity fix."
+            # Falls die Datei nicht existiert, listen wir zur Sicherheit den Inhalt auf
+            ls -R output/wwwroot/_framework
+          fi
 
           # 3. 404.html erstellen
-          cp output/wwwroot/index.html output/wwwroot/404.html
-
+          cp "$INDEX_PATH" "output/wwwroot/404.html"
 
       - name: Upload to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
