@@ -6,7 +6,17 @@
     <ImplicitUsings>enable</ImplicitUsings>
 	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
-
+    
+<PropertyGroup>
+  <PackageId>SR.Blazor.SimpleGrid</PackageId>
+  <Version>1.0.0</Version>
+  <Authors>CodingCodeSeb</Authors>
+  <Company></Company>
+  <Description>A lightweight Blazor component library for easy CSS Grid layouts.</Description>
+  <PackageTags>blazor;grid;layout;css-grid;components</PackageTags>
+  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  <RepositoryUrl>https://github.com/CodingCodeSeb/Blazor.SimpleGrid</RepositoryUrl>
+</PropertyGroup>
 
   <ItemGroup>
     <SupportedPlatform Include="browser" />
