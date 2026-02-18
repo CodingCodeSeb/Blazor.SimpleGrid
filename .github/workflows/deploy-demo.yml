@@ -21,26 +21,17 @@ jobs:
 
       - name: Fix for GitHub Pages
         run: |
-          # Pfad finden
-          INDEX_PATH="output/wwwroot/index.html"
-          
-          echo "Patche index.html unter $INDEX_PATH"
-          
-          # Wir ersetzen ALLES was im base href steht durch den Repo-Namen.
-          # WICHTIG: Achte darauf, dass hier EXAKT dein Repo-Name steht (Groß/Kleinschreibung!)
-          sed -i 's|<base href="[^"]*" />|<base href="/Blazor.SimpleGrid/" />|g' "$INDEX_PATH"
-          
-          # Falls deine index.html das Format <base href="/"> ohne Leerzeichen nutzt:
-          sed -i 's|<base href="[^"]*">|<base href="/Blazor.SimpleGrid/">|g' "$INDEX_PATH"
+          # 1. Base Href patchen (wirklich alles zwischen den Anführungszeichen ersetzen)
+          # Ersetze Blazor.SimpleGrid durch den EXAKTEN Namen deines Repos (Groß/Kleinschreibung!)
+          sed -i 's|<base href="[^"]*" />|<base href="/Blazor.SimpleGrid/" />|g' output/wwwroot/index.html
 
-          # Integrität deaktivieren (für die 404er nicht primär, aber wichtig für danach)
-          BOOT_JSON=$(find output/wwwroot -name "blazor.boot.json")
-          if [ -f "$BOOT_JSON" ]; then
-            sed -i 's/"sha256-[^"]*"/"sha256-ignore"/g' "$BOOT_JSON"
-          fi
+          # 2. Integrität deaktivieren (wegen der 404/Hash-Probleme auf GH Pages)
+          # Wir suchen alle JSON-Dateien im _framework Ordner (auch die mit Fingerprints)
+          find output/wwwroot/_framework -name "*.json" -exec sed -i 's/"sha256-[^"]*"/"sha256-ignore"/g' {} +
 
-          # 404 fix
-          cp "$INDEX_PATH" output/wwwroot/404.html
+          # 3. 404 fix (für Routing)
+          cp output/wwwroot/index.html output/wwwroot/404.html
+
 
       - name: Upload to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
