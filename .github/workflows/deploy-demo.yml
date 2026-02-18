@@ -2,7 +2,7 @@ name: Deploy Demo to GitHub Pages
 
 on:
   push:
-    branches: [ main ] # Oder dein primärer Branch-Name
+    branches: [ master ] # Oder dein primärer Branch-Name
 
 jobs:
   deploy:
