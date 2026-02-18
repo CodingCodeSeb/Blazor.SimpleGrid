@@ -21,17 +21,15 @@ jobs:
 
       - name: Fix for GitHub Pages
         run: |
-          # 1. Base Href patchen (wirklich alles zwischen den Anführungszeichen ersetzen)
-          # Ersetze Blazor.SimpleGrid durch den EXAKTEN Namen deines Repos (Groß/Kleinschreibung!)
-          sed -i 's|<base href="[^"]*" />|<base href="/Blazor.SimpleGrid/" />|g' output/wwwroot/index.html
-
-          # 2. Integrität deaktivieren (wegen der 404/Hash-Probleme auf GH Pages)
-          # Wir suchen alle JSON-Dateien im _framework Ordner (auch die mit Fingerprints)
+          # Wir suchen die Zeile, die 'base href' enthält, und ersetzen sie komplett
+          # Egal wie sie vorher aussah (mit/ohne Leerzeichen, Fingerprints etc.)
+          sed -i '/<base href=/c\    <base href="/Blazor.SimpleGrid/" />' output/wwwroot/index.html
+          
+          # Integrität deaktivieren (wie gehabt)
           find output/wwwroot/_framework -name "*.json" -exec sed -i 's/"sha256-[^"]*"/"sha256-ignore"/g' {} +
-
-          # 3. 404 fix (für Routing)
+          
+          # 404 fix
           cp output/wwwroot/index.html output/wwwroot/404.html
-
 
       - name: Upload to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
