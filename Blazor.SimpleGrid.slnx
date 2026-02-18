@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="samples/Blazor.SimpleGrid.Sample/Blazor.SimpleGrid.Sample.csproj" Id="14d6fa95-a808-41b8-bd58-88b2b1eb6fa8" />
   <Project Path="src/Blazor.SimpleGrid/Blazor.SimpleGrid.csproj" />
   <Project Path="tests/Blazor.SimpleGrid.Test/Blazor.SimpleGrid.Test.csproj" />
 </Solution>
