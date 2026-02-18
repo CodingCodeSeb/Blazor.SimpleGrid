@@ -1,0 +1,89 @@
+@using Blazor.SimpleGrid.Enums
+@using Blazor.SimpleGrid.Extensions
+
+<div @attributes="AdditionalAttributes" style="@getFullStyle()">
+    @ChildContent
+</div>
+
+@code {
+    /// <summary>
+    /// The content to be rendered inside this grid item.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// Captures all additional HTML attributes (class, id, etc.) and forwards them.
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    /// <summary>
+    /// Assigns the item to a named grid area defined in the parent grid.
+    /// </summary>
+    [Parameter]
+    public string Area { get; set; } = "";
+
+    /// <summary>
+    /// The starting column position (e.g., "1" or "span 2").
+    /// </summary>
+    [Parameter]
+    public string Column { get; set; } = "auto";
+
+    /// <summary>
+    /// The starting row position.
+    /// </summary>
+    [Parameter]
+    public string Row { get; set; } = "auto";
+
+    /// <summary>
+    /// How many columns the item should span.
+    /// </summary>
+    [Parameter]
+    public int ColumnSpan { get; set; } = 1;
+
+    /// <summary>
+    /// How many rows the item should span.
+    /// </summary>
+    [Parameter]
+    public int RowSpan { get; set; } = 1;
+
+    /// <summary>
+    /// Aligns this specific item horizontally within its cell (justify-self).
+    /// </summary>
+    [Parameter]
+    public HorizontalAlignment Horizontal { get; set; } = HorizontalAlignment.Stretch;
+
+    /// <summary>
+    /// Aligns this specific item vertically within its cell (align-self).
+    /// </summary>
+    [Parameter]
+    public VerticalAlignment Vertical { get; set; } = VerticalAlignment.Stretch;
+
+    /// <summary>
+    /// Custom CSS styles to be appended to the item's inline style.
+    /// </summary>
+    [Parameter]
+    public string Style { get; set; } = "";
+
+    /// <summary>
+    /// Compiles item parameters into a single CSS inline style string.
+    /// </summary>
+    private string getFullStyle()
+    {
+        var baseStyle = $@"
+            justify-self: {Horizontal.ToCss()};
+            align-self: {Vertical.ToCss()};
+            {Style}";
+
+        if (!string.IsNullOrWhiteSpace(Area))
+        {
+            return $"grid-area: {Area}; " + baseStyle;
+        }
+
+        return $@"
+            grid-column: {Column} / span {ColumnSpan};
+            grid-row: {Row} / span {RowSpan}; 
+            {baseStyle}";
+    }
+}

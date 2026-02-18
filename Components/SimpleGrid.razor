@@ -1,0 +1,122 @@
+@using Blazor.SimpleGrid.Enums
+@using Blazor.SimpleGrid.Extensions
+
+<div @attributes="AdditionalAttributes" style="@getFullStyle()">
+    @ChildContent
+</div>
+
+@code {
+    /// <summary>
+    /// The content to be rendered inside the grid.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// Captures all additional HTML attributes (class, id, @onclick, etc.) and forwards them to the div.
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    /// <summary>
+    /// Defines the columns of the grid (e.g., "1fr 2fr" or "repeat(3, 1fr)").
+    /// </summary>
+    [Parameter]
+    public string Columns { get; set; } = "repeat(auto-fit, minmax(200px, 1fr))";
+
+    /// <summary>
+    /// Defines named grid areas. Use the pipe symbol '|' to separate rows (e.g., "header header | sidebar content").
+    /// </summary>
+    [Parameter]
+    public string TemplateAreas { get; set; } = "";
+
+    /// <summary>
+    /// Controls the auto-placement algorithm (e.g., Row, Column, Dense).
+    /// </summary>
+    [Parameter]
+    public GridAutoFlow AutoFlow { get; set; } = GridAutoFlow.Row;
+
+    /// <summary>
+    /// Sets the size of implicitly created grid rows.
+    /// </summary>
+    [Parameter]
+    public string AutoRows { get; set; } = "auto";
+
+    /// <summary>
+    /// Spacing between columns.
+    /// </summary>
+    [Parameter]
+    public string HorizontalGap { get; set; } = "1rem";
+
+    /// <summary>
+    /// Spacing between rows.
+    /// </summary>
+    [Parameter]
+    public string VerticalGap { get; set; } = "1rem";
+
+    /// <summary>
+    /// Sets both HorizontalGap and VerticalGap to the same value.
+    /// </summary>
+    [Parameter]
+    public string? Gap { get; set; }
+
+    /// <summary>
+    /// The height of the grid container.
+    /// </summary>
+    [Parameter]
+    public string Height { get; set; } = "auto";
+
+    /// <summary>
+    /// Aligns the entire grid content horizontally.
+    /// </summary>
+    [Parameter]
+    public HorizontalAlignment Horizontal { get; set; } = HorizontalAlignment.Start;
+
+    /// <summary>
+    /// Aligns items within their grid areas vertically.
+    /// </summary>
+    [Parameter]
+    public VerticalAlignment Vertical { get; set; } = VerticalAlignment.Stretch;
+
+    /// <summary>
+    /// Custom CSS styles to be appended to the inline style attribute.
+    /// </summary>
+    [Parameter]
+    public string Style { get; set; } = "";
+
+    /// <summary>
+    /// Formats the TemplateAreas string by converting the pipe '|' separator into valid CSS syntax.
+    /// </summary>
+    private string formatAreas(string areas)
+    {
+        if (string.IsNullOrWhiteSpace(areas))
+            return "none";
+
+        var rows = areas.Split('|', StringSplitOptions.RemoveEmptyEntries);
+        return string.Join(" ", rows.Select(r => $"\"{r.Trim()}\""));
+    }
+
+    /// <summary>
+    /// Compiles all parameters into a single CSS inline style string.
+    /// </summary>
+    private string getFullStyle()
+    {
+        // Shorthand logic: If 'Gap' is provided, it overrides Horizontal/VerticalGap.
+        // If 'Gap' is null, we use the individual gap values.
+        string effectiveHorizontal = !string.IsNullOrEmpty(Gap) ? Gap : HorizontalGap;
+        string effectiveVertical = !string.IsNullOrEmpty(Gap) ? Gap : VerticalGap;
+
+        return $@"
+            display: grid;
+            grid-template-columns: {Columns};
+            grid-template-areas: {formatAreas(TemplateAreas)};
+            grid-auto-flow: {AutoFlow.ToCss()};
+            grid-auto-rows: {AutoRows};
+            column-gap: {effectiveHorizontal};
+            row-gap: {effectiveVertical};
+            justify-content: {Horizontal.ToCss()};
+            align-items: {Vertical.ToCss()};
+            height: {Height};
+            {Style}";
+    }
+}
