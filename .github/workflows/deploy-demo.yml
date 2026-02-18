@@ -20,7 +20,7 @@ jobs:
 
       # WICHTIG: Korrektur für GitHub Pages Unterpfade (Base-Tag)
       - name: Change base-tag in index.html
-        run: sed -i 's/<base href="\/" \/>/<base href="\/Blazor.SimpleGrid\/" \/>/g' release/wwwroot/index.html
+        run: sed -i 's/<base href="\/" \/>/<base href="\/Blazor.SimpleGrid.Sample\/" \/>/g' release/wwwroot/index.html
 
       # Fix für 404 Fehler beim Neuladen
       - name: Copy index.html to 404.html
