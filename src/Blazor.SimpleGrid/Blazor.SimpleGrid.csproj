@@ -9,7 +9,7 @@
     
 <PropertyGroup>
   <PackageId>Blazor.SimpleGridComponent</PackageId>
-  <Version>1.0.1</Version>
+  <Version>1.1.0</Version>
   <Authors>CodingCodeSeb</Authors>
   <Company></Company>
   <Description>A lightweight Blazor component library for easy CSS Grid layouts.</Description>
