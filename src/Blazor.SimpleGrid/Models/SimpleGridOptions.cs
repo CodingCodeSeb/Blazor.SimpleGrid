@@ -75,13 +75,24 @@ public class SimpleGridOptions
     /// Default horizontal alignment of the entire grid content (justify-content).
     /// Default: Start
     /// </summary>
-    public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.Start;
+    public HorizontalItemAlignment HorizontalItemAlignment { get; set; } = HorizontalItemAlignment.Start;
+
+    /// <summary>
+    /// Aligns the entire grid content horizontally.
+    /// </summary>
+    public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.FlexStart;
 
     /// <summary>
     /// Default vertical alignment of the grid items within their areas (align-items).
     /// Default: Stretch
     /// </summary>
-    public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Stretch;
+    public VerticalItemAlignment VerticalItemAlignment { get; set; } = VerticalItemAlignment.Stretch;
+
+
+    /// <summary>
+    /// Aligns the entire grid content vertically.
+    /// </summary>
+    public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Strech;
 
     // --- GridItem Defaults ---
 
@@ -89,11 +100,11 @@ public class SimpleGridOptions
     /// Default horizontal alignment for individual grid items (justify-self).
     /// Default: Stretch
     /// </summary>
-    public HorizontalAlignment ItemHorizontalAlignment { get; set; } = HorizontalAlignment.Stretch;
+    public HorizontalItemAlignment ItemHorizontalAlignment { get; set; } = HorizontalItemAlignment.Auto;
 
     /// <summary>
     /// Default vertical alignment for individual grid items (align-self).
     /// Default: Stretch
     /// </summary>
-    public VerticalAlignment ItemVerticalAlignment { get; set; } = VerticalAlignment.Stretch;
+    public VerticalItemAlignment ItemVerticalAlignment { get; set; } = VerticalItemAlignment.Auto;
 }

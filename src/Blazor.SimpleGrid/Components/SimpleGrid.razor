@@ -76,6 +76,12 @@
     public string? Width { get; set; }
 
     /// <summary>
+    /// Aligns items within their grid areas horizontally.
+    /// </summary>
+    [Parameter]
+    public HorizontalItemAlignment? HorizontalItemAlignment { get; set; }
+
+    /// <summary>
     /// Aligns the entire grid content horizontally.
     /// </summary>
     [Parameter]
@@ -83,6 +89,12 @@
 
     /// <summary>
     /// Aligns items within their grid areas vertically.
+    /// </summary>
+    [Parameter]
+    public VerticalItemAlignment? VerticalItemAlignment { get; set; }
+
+    /// <summary>
+    /// Aligns the entire grid content vertically.
     /// </summary>
     [Parameter]
     public VerticalAlignment? VerticalAlignment { get; set; }
@@ -134,7 +146,9 @@
         string w = Width ?? options.Width;
         string h = Height ?? options.Height;
         var flow = AutoFlow ?? options.AutoFlow;
+        var hItemAlign = HorizontalItemAlignment ?? options.HorizontalItemAlignment;
         var hAlign = HorizontalAlignment ?? options.HorizontalAlignment;
+        var vItemAlign = VerticalItemAlignment ?? options.VerticalItemAlignment;
         var vAlign = VerticalAlignment ?? options.VerticalAlignment;
 
         // Gap Logic: Shorthand 'Gap' overrides specific gaps
@@ -153,8 +167,10 @@
             grid-auto-rows: {autoRows};
             column-gap: {effectiveHorizontal};
             row-gap: {effectiveVertical};
+            justify-items: {hItemAlign.ToCss()};
             justify-content: {hAlign.ToCss()};
-            align-items: {vAlign.ToCss()};
+            align-items: {vItemAlign.ToCss()};
+            align-content: {vAlign.ToCss()};
             {Style}";
     }
 }

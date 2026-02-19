@@ -7,20 +7,20 @@
 <div class="sg-demo-wrapper">
     <header class="sg-header">
         <h1>Blazor.SimpleGrid Showcase</h1>
-        <p>Eine leichte Grid-Library für moderne Blazor-Apps.</p>
+        <p>A lightweight grid library for modern Blazor apps.</p>
     </header>
 
     <section class="sg-section">
-        <h2>1. Einfaches Spalten-Layout</h2>
+        <h2>1. Simple column layout</h2>
         <div class="sg-preview">
-            <SimpleGrid Columns="1fr 1fr 1fr" Gap="15px">
-                <SimpleGridItem><div class="sg-box">1</div></SimpleGridItem>
-                <SimpleGridItem><div class="sg-box">2</div></SimpleGridItem>
-                <SimpleGridItem><div class="sg-box">3</div></SimpleGridItem>
+            <SimpleGrid Columns="1fr 1fr 1fr" Gap="15px" HorizontalItemAlignment="HorizontalItemAlignment.Stretch">
+                <SimpleGridItem class="sg-box">1</SimpleGridItem>
+                <SimpleGridItem class="sg-box">2</SimpleGridItem>
+                <SimpleGridItem class="sg-box">3</SimpleGridItem>
             </SimpleGrid>
         </div>
         <div class="sg-code">
-            <pre><code>&lt;SimpleGrid Columns="1fr 1fr 1fr" Gap="15px"&gt;
+            <pre><code>&lt;SimpleGrid Columns="1fr 1fr 1fr" Gap="15px" HorizontalItemAlignment="HorizontalItemAlignment.Stretch"&gt;
     &lt;SimpleGridItem&gt;1&lt;/SimpleGridItem&gt;
     &lt;SimpleGridItem&gt;2&lt;/SimpleGridItem&gt;
     &lt;SimpleGridItem&gt;3&lt;/SimpleGridItem&gt;
@@ -33,52 +33,115 @@
         <div class="sg-preview">
             <SimpleGrid Columns="150px 1fr 150px" 
                         TemplateAreas="header header header | nav main side | footer footer footer" 
-                        Gap="8px">
+                        Gap="8px"
+                        HorizontalItemAlignment="HorizontalItemAlignment.Stretch">
                 
-                <SimpleGridItem Area="header"><div class="sg-box header">Header</div></SimpleGridItem>
-                <SimpleGridItem Area="nav"><div class="sg-box nav">Nav</div></SimpleGridItem>
-                <SimpleGridItem Area="main"><div class="sg-box main">Main Content</div></SimpleGridItem>
-                <SimpleGridItem Area="side"><div class="sg-box side">Side</div></SimpleGridItem>
-                <SimpleGridItem Area="footer"><div class="sg-box footer">Footer</div></SimpleGridItem>
+                <SimpleGridItem class="sg-box header" Area="header">Header</SimpleGridItem>
+                <SimpleGridItem class="sg-box nav" Area="nav">Nav</SimpleGridItem>
+                <SimpleGridItem class="sg-box main" Area="main">Main Content</SimpleGridItem>
+                <SimpleGridItem class="sg-box side" Area="side">Side</SimpleGridItem>
+                <SimpleGridItem class="sg-box footer" Area="footer">Footer</SimpleGridItem>
             </SimpleGrid>
         </div>
         <div class="sg-code">
             <pre><code>&lt;SimpleGrid Columns="150px 1fr 150px" 
             TemplateAreas="header header header | nav main side | footer footer footer" 
-            Gap="8px"&gt;
+            Gap="8px"
+            HorizontalItemAlignment="HorizontalItemAlignment.Stretch"&gt;
             
-    &lt;SimpleGridItem Area="header"&gt;&lt;div class="sg-box header"&gt;Header&lt;/div&gt;&lt;/SimpleGridItem&gt;
-    &lt;SimpleGridItem Area="nav"&gt;&lt;div class="sg-box nav"&gt;Nav&lt;/div&gt;&lt;/SimpleGridItem&gt;
-    &lt;SimpleGridItem Area="main"&gt;&lt;div class="sg-box main"&gt;Main Content&lt;/div&gt;&lt;/SimpleGridItem&gt;
-    &lt;SimpleGridItem Area="side"&gt;&lt;div class="sg-box side"&gt;Side&lt;/div&gt;&lt;/SimpleGridItem&gt;
-    &lt;SimpleGridItem Area="footer"&gt;&lt;div class="sg-box footer"&gt;Footer&lt;/div&gt;&lt;/SimpleGridItem&gt;
+    &lt;SimpleGridItem Area="header"&gt;Header&lt;/SimpleGridItem&gt;
+    &lt;SimpleGridItem Area="nav"&gt;Nav&lt;/SimpleGridItem&gt;
+    &lt;SimpleGridItem Area="main"&gt;Main Content&lt;/SimpleGridItem&gt;
+    &lt;SimpleGridItem Area="side"&gt;Side&lt;/SimpleGridItem&gt;
+    &lt;SimpleGridItem Area="footer"&gt;Footer&lt;/SimpleGridItem&gt;
 &lt;/SimpleGrid&gt;</code></pre>
         </div>
     </section>
     <section class="sg-section">
         <h2>3. Responsive Grid (Auto-Resize)</h2>
         <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">
-            Verkleinere das Browserfenster, um zu sehen, wie die Spalten automatisch umbrechen.
+            Minimize the browser window to see how the columns wrap automatically.
         </p>
         <div class="sg-preview">
-            <SimpleGrid Columns="repeat(auto-fill, minmax(200px, 1fr))" Gap="15px">
-                <SimpleGridItem><div class="sg-box">Card 1</div></SimpleGridItem>
-                <SimpleGridItem><div class="sg-box">Card 2</div></SimpleGridItem>
-                <SimpleGridItem><div class="sg-box">Card 3</div></SimpleGridItem>
-                <SimpleGridItem><div class="sg-box">Card 4</div></SimpleGridItem>
+            <SimpleGrid Columns="repeat(auto-fill, minmax(200px, 1fr))" Gap="15px"
+                        HorizontalItemAlignment="HorizontalItemAlignment.Stretch">
+                <SimpleGridItem class="sg-box">Card 1</SimpleGridItem>
+                <SimpleGridItem class="sg-box">Card 2</SimpleGridItem>
+                <SimpleGridItem class="sg-box">Card 3</SimpleGridItem>
+                <SimpleGridItem class="sg-box">Card 4</SimpleGridItem>
             </SimpleGrid>
         </div>
         <div class="sg-code">
-            <pre><code>&lt;!-- Die Spalten passen sich automatisch der Container-Breite an --&gt;
-&lt;SimpleGrid Columns="repeat(auto-fill, minmax(200px, 1fr))" Gap="15px"&gt;
-    &lt;SimpleGridItem&gt;&lt;div class="sg-box"&gt;Card 1&lt;/div&gt;&lt;/SimpleGridItem&gt;
-    &lt;SimpleGridItem&gt;&lt;div class="sg-box"&gt;Card 2&lt;/div&gt;&lt;/SimpleGridItem&gt;
-    &lt;SimpleGridItem&gt;&lt;div class="sg-box"&gt;Card 3&lt;/div&gt;&lt;/SimpleGridItem&gt;
-    &lt;SimpleGridItem&gt;&lt;div class="sg-box"&gt;Card 4&lt;/div&gt;&lt;/SimpleGridItem&gt;
+            <pre><code>&lt;SimpleGrid Columns="repeat(auto-fill, minmax(200px, 1fr))" Gap="15px" HorizontalItemAlignment="HorizontalItemAlignment.Stretch"&gt;
+    &lt;SimpleGridItem&gt;Card 1&lt;/SimpleGridItem&gt;
+    &lt;SimpleGridItem&gt;Card 2&lt;/SimpleGridItem&gt;
+    &lt;SimpleGridItem&gt;Card 3&lt;/SimpleGridItem&gt;
+    &lt;SimpleGridItem&gt;Card 4&lt;/SimpleGridItem&gt;
+&lt;/SimpleGrid&gt;</code></pre>
+        </div>
+    </section>
+    <section class="sg-section">
+        <h2>4. Explicit Rows & Width (Dashboard Style)</h2>
+        <p class="sg-description">Using explicit <code>Rows</code> and <code>Width="100%"</code> to create a fixed-height layout.</p>
+        <div class="sg-preview">
+            <SimpleGrid Columns="1fr 1fr" Rows="50px 150px" Width="100%" Gap="10px" HorizontalItemAlignment="HorizontalItemAlignment.Stretch">
+                <SimpleGridItem class="sg-box header" ColumnSpan="2">Top Bar (50px)</SimpleGridItem>
+                <SimpleGridItem class="sg-box main">Widget A (150px)</SimpleGridItem>
+                <SimpleGridItem class="sg-box main">Widget B (150px)</SimpleGridItem>
+            </SimpleGrid>
+        </div>
+        <div class="sg-code">
+            <pre><code>&lt;SimpleGrid Columns="1fr 1fr" Rows="50px 150px" Width="100%" Gap="10px"  HorizontalItemAlignment="HorizontalItemAlignment.Stretch"&gt;
+    &lt;SimpleGridItem ColumnSpan="2"&gt;Top Bar (50px)&lt;/SimpleGridItem&gt;
+    &lt;SimpleGridItem&gt;Widget A (150px)&lt;/SimpleGridItem&gt;
+    &lt;SimpleGridItem&gt;Widget B (150px)&lt;/SimpleGridItem&gt;
 &lt;/SimpleGrid&gt;</code></pre>
         </div>
     </section>
 
+    @* --- NEU: Sektion 5: Alignment & Overrides --- *@
+    <section class="sg-section">
+        <h2>5. Alignment & Item Overrides</h2>
+        <p class="sg-description">The grid centers all items, but the second item overrides this to <code>End</code>.</p>
+        <div class="sg-preview">
+            <SimpleGrid Columns="1fr 1fr" Height="150px"
+                        HorizontalItemAlignment="HorizontalItemAlignment.Center"
+                        VerticalItemAlignment="VerticalItemAlignment.Center"
+                        Style="background: #eee;">
+
+                <SimpleGridItem class="sg-box">
+                    Centered
+                </SimpleGridItem>
+
+                <SimpleGridItem class="sg-box" HorizontalAlignment="HorizontalItemAlignment.End" VerticalAlignment="VerticalItemAlignment.End">
+                    I'm at the Bottom
+                </SimpleGridItem>
+            </SimpleGrid>
+        </div>
+        <div class="sg-code">
+            <pre><code>&lt;SimpleGrid Columns="1fr 1fr" Height="150px" 
+            HorizontalItemAlignment="HorizontalItemAlignment.Center" 
+            VerticalItemAlignment="VerticalItemAlignment.Center"&gt;
+            
+    &lt;SimpleGridItem&gt;Centered Item&lt;/SimpleGridItem&gt;
+    
+    &lt;SimpleGridItem VerticalAlignment="VerticalItemAlignment.End"&gt;
+        Bottom Override
+    &lt;/SimpleGridItem&gt;
+&lt;/SimpleGrid&gt;</code></pre>
+        </div>
+    </section>
+
+    <section class="sg-section">
+        <h2>6. Global Options (DI)</h2>
+        <p class="sg-description">You can configure these defaults in your <code>Program.cs</code>.</p>
+        <div class="sg-code">
+            <pre><code>builder.Services.AddSimpleGrid(options => {
+    options.HorizontalGap = "2rem";
+    options.ItemVerticalAlignment = VerticalItemAlignment.Center;
+});</code></pre>
+        </div>
+    </section>
 </div>
 
 <style>

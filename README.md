@@ -27,11 +27,15 @@ A modern, lightweight Blazor component library for creating **CSS Grid Layouts**
 ## Installation
 
 1. Install the package via NuGet:
-   `dotnet add package Blazor.SimpleGridComponent`
+   ```
+    dotnet add package Blazor.SimpleGridComponent
+    ```
 
 2. Add the namespace to your _Imports.razor:
-   `@using Blazor.SimpleGrid.Components`
-   `@using Blazor.SimpleGrid.Enums`
+   ```
+   @using Blazor.SimpleGrid.Components
+   @using Blazor.SimpleGrid.Enums
+    ```
 
 ---
 
@@ -72,7 +76,13 @@ You can register the services in your Program.cs file.:
 Custom Global Defaults
 This allows you to override any property for all grids in your app.
 ```csharp
-builder.Services.AddSimpleGrid(options => { options.HorizontalGap = "20px"; options.VerticalGap = "20px"; options.ItemHorizontalAlignment = HorizontalAlignment.Center; options.Columns = "1fr 1fr"; // All grids will default to 2 columns });
+builder.Services.AddSimpleGrid(options =>
+{
+    options.HorizontalGap = "20px";
+    options.VerticalGap = "20px";
+    options.ItemHorizontalAlignment = HorizontalItemAlignment.Center;
+    options.Columns = "1fr 1fr"; // All grids will default to 2 columns
+});
 ```
 
 ### 2. Priority Order
@@ -98,8 +108,10 @@ The components follow a strict priority logic to determine which value to use:
 | Gap | string | null | Shorthand for both Horizontal and Vertical gap. |
 | Width | string | "auto" | Width of the grid container. |
 | Height | string | "auto" | Height of the grid container. |
-| HorizontalAlignment | HorizontalAlignment | Start | Align grid content (justify-content). |
-| VerticalAlignment | VerticalAlignment | Stretch | Align items (align-items). |
+| HorizontalItemAlignment | HorizontalItemAlignment | Start | Align grid content (justify-items). |
+| HorizontalAlignment | HorizontalAlignment | FlexStart | Align of entire grid (justify-content). |
+| VerticalItemAlignment | VerticalItemAlignment | Stretch | Align items (align-items). |
+| VerticalAlignment | VerticalAlignment | Stretch | Align of entire grid (align-content). |
 #### SimpleGridItem (Element)
 
 | Property | Type | Default | Description |
@@ -109,8 +121,8 @@ The components follow a strict priority logic to determine which value to use:
 | Row | string | "auto" | Starting row position. |
 | ColumnSpan | int | 1 | Number of columns to span. |
 | RowSpan | int | 1 | Number of rows to span. |
-| HorizontalAlignment | HorizontalAlignment | Stretch | justify-self. |
-| VerticalAlignment | VerticalAlignment | Stretch | align-self. |
+| HorizontalAlignment | HorizontalAlignment | Auto | justify-self. |
+| VerticalAlignment | VerticalAlignment | Auto | align-self. |
 
 ---
 

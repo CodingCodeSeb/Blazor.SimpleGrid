@@ -2,15 +2,16 @@
 
 /// <summary>
 /// Defines how the browser distributes space between and around content items 
-/// along vertical of the grid.
+/// along the cross-axis (vertical) of the grid.
 /// </summary>
-public enum VerticalAlignment
+public enum VerticalItemAlignment
 {
-    Strech,
+    Auto,
+    Start,
     Center,
+    End,
+    Stretch,
+    Baseline,
     FlexStart,
     FlexEnd,
-    SpaceBetween,
-    SpaceAround,
-    SpaceEvenly
 }

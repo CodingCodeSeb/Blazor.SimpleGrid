@@ -24,13 +24,13 @@ public class GridComponentTests
     public void Grid_ShouldApplyAlignmentProperties()
     {
         var cut = _context.Render<Sg.SimpleGrid>(parameters => parameters
-            .Add(p => p.HorizontalAlignment, Sge.HorizontalAlignment.Center)
-            .Add(p => p.VerticalAlignment, Sge.VerticalAlignment.End)
+            .Add(p => p.HorizontalItemAlignment, Sge.HorizontalItemAlignment.Center)
+            .Add(p => p.VerticalItemAlignment, Sge.VerticalItemAlignment.End)
         );
 
         var style = cut.Find("div").GetAttribute("style");
 
-        Assert.That(style, Does.Contain("justify-content: center;"));
+        Assert.That(style, Does.Contain("justify-items: center;"));
         Assert.That(style, Does.Contain("align-items: end;"));
     }
 
@@ -84,7 +84,7 @@ public class GridComponentTests
         _context.Services.AddSimpleGrid(globalOptions =>
         {
             globalOptions.HorizontalGap = "55px";
-            globalOptions.VerticalAlignment = Sge.VerticalAlignment.Center;
+            globalOptions.VerticalItemAlignment = Sge.VerticalItemAlignment.Center;
         });
 
         // 2. Grid ohne Parameter rendern
@@ -119,7 +119,7 @@ public class GridComponentTests
         // 1. Globale Item-Ausrichtung festlegen
         _context.Services.AddSingleton(new SimpleGridOptions
         {
-            ItemHorizontalAlignment = Sge.HorizontalAlignment.End
+            ItemHorizontalAlignment = Sge.HorizontalItemAlignment.End
         });
 
         var cut = _context.Render<Sg.SimpleGridItem>();
@@ -148,8 +148,8 @@ public class GridComponentTests
     public void GridItem_ShouldApplySelfAlignment()
     {
         var cut = _context.Render<Sg.SimpleGridItem>(parameters => parameters
-            .Add(p => p.HorizontalAlignment, Sge.HorizontalAlignment.Start)
-            .Add(p => p.VerticalAlignment, Sge.VerticalAlignment.Baseline)
+            .Add(p => p.HorizontalAlignment, Sge.HorizontalItemAlignment.Start)
+            .Add(p => p.VerticalAlignment, Sge.VerticalItemAlignment.Baseline)
         );
 
         var style = cut.Find("div").GetAttribute("style");

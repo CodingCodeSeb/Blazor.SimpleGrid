@@ -4,12 +4,15 @@
 /// Defines how the browser distributes space between and around content items 
 /// along the main-axis (horizontal) of the grid.
 /// </summary>
-public enum HorizontalAlignment
+public enum HorizontalItemAlignment
 {
+    Auto,
+    Normal,
+    Stretch,
+    Start,
+    Left,
     Center,
-    FlexStart,
-    FlexEnd,
-    SpaceBetween,
-    SpaceAround,
-    SpaceEvenly
+    End,
+    Right,
+    BaselineAlignment
 }

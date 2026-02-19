@@ -55,13 +55,13 @@
     /// Aligns this specific item horizontally within its cell (justify-self).
     /// </summary>
     [Parameter]
-    public HorizontalAlignment? HorizontalAlignment { get; set; }
+    public HorizontalItemAlignment? HorizontalAlignment { get; set; }
 
     /// <summary>
     /// Aligns this specific item vertically within its cell (align-self).
     /// </summary>
     [Parameter]
-    public VerticalAlignment? VerticalAlignment { get; set; }
+    public VerticalItemAlignment? VerticalAlignment { get; set; }
 
     /// <summary>
     /// Custom CSS styles to be appended to the item's inline style.
@@ -77,12 +77,12 @@
         var options = ServiceProvider.GetService<SimpleGridOptions>() ?? new SimpleGridOptions();
 
         // Nutze den gesetzten Parameter oder den globalen Standardwert aus dem Service
-        var hAlign = HorizontalAlignment ?? options.ItemHorizontalAlignment;
-        var vAlign = VerticalAlignment ?? options.ItemVerticalAlignment;
+        var hAlign = HorizontalAlignment?.ToCss() ?? options.ItemHorizontalAlignment.ToCss();
+        var vAlign = VerticalAlignment?.ToCss() ?? options.ItemVerticalAlignment.ToCss();
 
         var baseStyle = $@"
-            justify-self: {hAlign.ToCss()};
-            align-self: {vAlign.ToCss()};
+            justify-self: {hAlign};
+            align-self: {vAlign};
             {Style}";
 
         if (!string.IsNullOrWhiteSpace(Area))
