@@ -1,4 +1,7 @@
-﻿using Bunit;
+﻿using Blazor.SimpleGrid.Extensions;
+using Blazor.SimpleGrid.Models;
+using Bunit;
+using Microsoft.Extensions.DependencyInjection;
 using Sg = Blazor.SimpleGrid.Components;
 using Sge = Blazor.SimpleGrid.Enums;
 
@@ -21,14 +24,30 @@ public class GridComponentTests
     public void Grid_ShouldApplyAlignmentProperties()
     {
         var cut = _context.Render<Sg.SimpleGrid>(parameters => parameters
-            .Add(p => p.Horizontal, Sge.HorizontalAlignment.Center)
-            .Add(p => p.Vertical, Sge.VerticalAlignment.End)
+            .Add(p => p.HorizontalAlignment, Sge.HorizontalAlignment.Center)
+            .Add(p => p.VerticalAlignment, Sge.VerticalAlignment.End)
         );
 
         var style = cut.Find("div").GetAttribute("style");
 
         Assert.That(style, Does.Contain("justify-content: center;"));
         Assert.That(style, Does.Contain("align-items: end;"));
+    }
+
+    [Test]
+    public void Grid_ShouldApplyNewProperties_WidthAndRows()
+    {
+        var cut = _context.Render<Sg.SimpleGrid>(parameters => parameters
+            .Add(p => p.Width, "100%")
+            .Add(p => p.Rows, "100px 1fr")
+            .Add(p => p.AutoColumns, "200px")
+        );
+
+        var style = cut.Find("div").GetAttribute("style");
+
+        Assert.That(style, Does.Contain("width: 100%;"));
+        Assert.That(style, Does.Contain("grid-template-rows: 100px 1fr;"));
+        Assert.That(style, Does.Contain("grid-auto-columns: 200px;"));
     }
 
     [Test]
@@ -56,6 +75,59 @@ public class GridComponentTests
         Assert.That(style, Does.Contain("height: 500px;"));
     }
 
+    // --- Global Options Tests (Dependency Injection) ---
+
+    [Test]
+    public void Grid_ShouldUseGlobalOptions_WhenNoParametersSet()
+    {
+        // 1. Globalen Dienst mit speziellen Werten registrieren
+        _context.Services.AddSimpleGrid(globalOptions =>
+        {
+            globalOptions.HorizontalGap = "55px";
+            globalOptions.VerticalAlignment = Sge.VerticalAlignment.Center;
+        });
+
+        // 2. Grid ohne Parameter rendern
+        var cut = _context.Render<Sg.SimpleGrid>();
+        var style = cut.Find("div").GetAttribute("style");
+
+        // 3. Prüfen, ob die globalen Werte im Style landen
+        Assert.That(style, Does.Contain("column-gap: 55px;"));
+        Assert.That(style, Does.Contain("align-items: center;"));
+    }
+
+    [Test]
+    public void Grid_ShouldOverrideGlobalOptions_WithLocalParameters()
+    {
+        // 1. Globalen Dienst registrieren (z.B. 55px Gap)
+        _context.Services.AddSingleton(new SimpleGridOptions { HorizontalGap = "55px" });
+
+        // 2. Lokal am Tag 10px Gap setzen
+        var cut = _context.Render<Sg.SimpleGrid>(parameters => parameters
+            .Add(p => p.HorizontalGap, "10px")
+        );
+        var style = cut.Find("div").GetAttribute("style");
+
+        // 3. Lokal muss gewinnen!
+        Assert.That(style, Does.Contain("column-gap: 10px;"));
+        Assert.That(style, Does.Not.Contain("column-gap: 55px;"));
+    }
+
+    [Test]
+    public void GridItem_ShouldUseGlobalOptions_ForSelfAlignment()
+    {
+        // 1. Globale Item-Ausrichtung festlegen
+        _context.Services.AddSingleton(new SimpleGridOptions
+        {
+            ItemHorizontalAlignment = Sge.HorizontalAlignment.End
+        });
+
+        var cut = _context.Render<Sg.SimpleGridItem>();
+        var style = cut.Find("div").GetAttribute("style");
+
+        Assert.That(style, Does.Contain("justify-self: end;"));
+    }
+
     // --- Item Tests (SimpleGridItem) ---
 
     [Test]
@@ -76,8 +148,8 @@ public class GridComponentTests
     public void GridItem_ShouldApplySelfAlignment()
     {
         var cut = _context.Render<Sg.SimpleGridItem>(parameters => parameters
-            .Add(p => p.Horizontal, Sge.HorizontalAlignment.Start)
-            .Add(p => p.Vertical, Sge.VerticalAlignment.Baseline)
+            .Add(p => p.HorizontalAlignment, Sge.HorizontalAlignment.Start)
+            .Add(p => p.VerticalAlignment, Sge.VerticalAlignment.Baseline)
         );
 
         var style = cut.Find("div").GetAttribute("style");

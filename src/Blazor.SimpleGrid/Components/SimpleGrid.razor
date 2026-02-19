@@ -1,7 +1,10 @@
 @using Blazor.SimpleGrid.Enums
 @using Blazor.SimpleGrid.Extensions
+@using Blazor.SimpleGrid.Models
+@using Microsoft.Extensions.DependencyInjection
+@inject IServiceProvider ServiceProvider
 
-<div @attributes="AdditionalAttributes" style="@getFullStyle()">
+<div @attributes="AdditionalAttributes" style="@GetFullStyle()">
     @ChildContent
 </div>
 
@@ -22,37 +25,37 @@
     /// Defines the columns of the grid (e.g., "1fr 2fr" or "repeat(3, 1fr)").
     /// </summary>
     [Parameter]
-    public string Columns { get; set; } = "repeat(auto-fit, minmax(200px, 1fr))";
+    public string? Columns { get; set; }
 
     /// <summary>
     /// Defines named grid areas. Use the pipe symbol '|' to separate rows (e.g., "header header | sidebar content").
     /// </summary>
     [Parameter]
-    public string TemplateAreas { get; set; } = "";
+    public string? TemplateAreas { get; set; }
 
     /// <summary>
     /// Controls the auto-placement algorithm (e.g., Row, Column, Dense).
     /// </summary>
     [Parameter]
-    public GridAutoFlow AutoFlow { get; set; } = GridAutoFlow.Row;
+    public GridAutoFlow? AutoFlow { get; set; }
 
     /// <summary>
     /// Sets the size of implicitly created grid rows.
     /// </summary>
     [Parameter]
-    public string AutoRows { get; set; } = "auto";
+    public string? AutoRows { get; set; }
 
     /// <summary>
     /// Spacing between columns.
     /// </summary>
     [Parameter]
-    public string HorizontalGap { get; set; } = "1rem";
+    public string? HorizontalGap { get; set; }
 
     /// <summary>
     /// Spacing between rows.
     /// </summary>
     [Parameter]
-    public string VerticalGap { get; set; } = "1rem";
+    public string? VerticalGap { get; set; }
 
     /// <summary>
     /// Sets both HorizontalGap and VerticalGap to the same value.
@@ -64,19 +67,39 @@
     /// The height of the grid container.
     /// </summary>
     [Parameter]
-    public string Height { get; set; } = "auto";
+    public string? Height { get; set; }
+
+    /// <summary>
+    /// The width of the grid container.
+    /// </summary>
+    [Parameter]
+    public string? Width { get; set; }
 
     /// <summary>
     /// Aligns the entire grid content horizontally.
     /// </summary>
     [Parameter]
-    public HorizontalAlignment Horizontal { get; set; } = HorizontalAlignment.Start;
+    public HorizontalAlignment? HorizontalAlignment { get; set; }
 
     /// <summary>
     /// Aligns items within their grid areas vertically.
     /// </summary>
     [Parameter]
-    public VerticalAlignment Vertical { get; set; } = VerticalAlignment.Stretch;
+    public VerticalAlignment? VerticalAlignment { get; set; }
+
+    /// <summary>
+    /// Defines the explicit rows of the grid (e.g., "100px auto 1fr").
+    /// If not set, grid-template-rows will be "none" or controlled by AutoRows.
+    /// </summary>
+    [Parameter]
+    public string? Rows { get; set; }
+
+    /// <summary>
+    /// Sets the size of implicitly created grid columns.
+    /// Useful when AutoFlow is set to Column.
+    /// </summary>
+    [Parameter]
+    public string? AutoColumns { get; set; }
 
     /// <summary>
     /// Custom CSS styles to be appended to the inline style attribute.
@@ -87,7 +110,7 @@
     /// <summary>
     /// Formats the TemplateAreas string by converting the pipe '|' separator into valid CSS syntax.
     /// </summary>
-    private string formatAreas(string areas)
+    private string FormatAreas(string? areas)
     {
         if (string.IsNullOrWhiteSpace(areas))
             return "none";
@@ -99,24 +122,39 @@
     /// <summary>
     /// Compiles all parameters into a single CSS inline style string.
     /// </summary>
-    private string getFullStyle()
+    private string GetFullStyle()
     {
-        // Shorthand logic: If 'Gap' is provided, it overrides Horizontal/VerticalGap.
-        // If 'Gap' is null, we use the individual gap values.
-        string effectiveHorizontal = !string.IsNullOrEmpty(Gap) ? Gap : HorizontalGap;
-        string effectiveVertical = !string.IsNullOrEmpty(Gap) ? Gap : VerticalGap;
+        var options = ServiceProvider.GetService<SimpleGridOptions>() ?? new SimpleGridOptions();
+
+        // Priority: Parameter > Global Service Options
+        string cols = Columns ?? options.Columns;
+        string rows = Rows ?? options.Rows;
+        string autoCols = AutoColumns ?? options.AutoColumns;
+        string autoRows = AutoRows ?? options.AutoRows;
+        string w = Width ?? options.Width;
+        string h = Height ?? options.Height;
+        var flow = AutoFlow ?? options.AutoFlow;
+        var hAlign = HorizontalAlignment ?? options.HorizontalAlignment;
+        var vAlign = VerticalAlignment ?? options.VerticalAlignment;
+
+        // Gap Logic: Shorthand 'Gap' overrides specific gaps
+        string effectiveHorizontal = !string.IsNullOrEmpty(Gap) ? Gap : (HorizontalGap ?? options.HorizontalGap);
+        string effectiveVertical = !string.IsNullOrEmpty(Gap) ? Gap : (VerticalGap ?? options.VerticalGap);
 
         return $@"
             display: grid;
-            grid-template-columns: {Columns};
-            grid-template-areas: {formatAreas(TemplateAreas)};
-            grid-auto-flow: {AutoFlow.ToCss()};
-            grid-auto-rows: {AutoRows};
+            width: {w};
+            height: {h};
+            grid-template-columns: {cols};
+            grid-template-rows: {rows};
+            grid-template-areas: {FormatAreas(TemplateAreas)};
+            grid-auto-flow: {flow.ToCss()};
+            grid-auto-columns: {autoCols};
+            grid-auto-rows: {autoRows};
             column-gap: {effectiveHorizontal};
             row-gap: {effectiveVertical};
-            justify-content: {Horizontal.ToCss()};
-            align-items: {Vertical.ToCss()};
-            height: {Height};
+            justify-content: {hAlign.ToCss()};
+            align-items: {vAlign.ToCss()};
             {Style}";
     }
 }

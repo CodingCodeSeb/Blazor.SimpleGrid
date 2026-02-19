@@ -1,7 +1,10 @@
 @using Blazor.SimpleGrid.Enums
 @using Blazor.SimpleGrid.Extensions
+@using Blazor.SimpleGrid.Models
+@using Microsoft.Extensions.DependencyInjection
+@inject IServiceProvider ServiceProvider
 
-<div @attributes="AdditionalAttributes" style="@getFullStyle()">
+<div @attributes="AdditionalAttributes" style="@GetFullStyle()">
     @ChildContent
 </div>
 
@@ -52,13 +55,13 @@
     /// Aligns this specific item horizontally within its cell (justify-self).
     /// </summary>
     [Parameter]
-    public HorizontalAlignment Horizontal { get; set; } = HorizontalAlignment.Stretch;
+    public HorizontalAlignment? HorizontalAlignment { get; set; }
 
     /// <summary>
     /// Aligns this specific item vertically within its cell (align-self).
     /// </summary>
     [Parameter]
-    public VerticalAlignment Vertical { get; set; } = VerticalAlignment.Stretch;
+    public VerticalAlignment? VerticalAlignment { get; set; }
 
     /// <summary>
     /// Custom CSS styles to be appended to the item's inline style.
@@ -69,11 +72,17 @@
     /// <summary>
     /// Compiles item parameters into a single CSS inline style string.
     /// </summary>
-    private string getFullStyle()
+    private string GetFullStyle()
     {
+        var options = ServiceProvider.GetService<SimpleGridOptions>() ?? new SimpleGridOptions();
+
+        // Nutze den gesetzten Parameter oder den globalen Standardwert aus dem Service
+        var hAlign = HorizontalAlignment ?? options.ItemHorizontalAlignment;
+        var vAlign = VerticalAlignment ?? options.ItemVerticalAlignment;
+
         var baseStyle = $@"
-            justify-self: {Horizontal.ToCss()};
-            align-self: {Vertical.ToCss()};
+            justify-self: {hAlign.ToCss()};
+            align-self: {vAlign.ToCss()};
             {Style}";
 
         if (!string.IsNullOrWhiteSpace(Area))

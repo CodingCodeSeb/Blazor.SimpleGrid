@@ -18,6 +18,12 @@ A modern, lightweight Blazor component library for creating **CSS Grid Layouts**
 
 ---
 
+## Live Demo
+> Explore all features and live examples here:
+[https://codingcodeseb.github.io/Blazor.SimpleGrid/](https://codingcodeseb.github.io/Blazor.SimpleGrid/)
+
+---
+
 ## Installation
 
 1. Install the package via NuGet:
@@ -55,21 +61,56 @@ A modern, lightweight Blazor component library for creating **CSS Grid Layouts**
 
 ---
 
-## Configuration
+## Global Configuration (Optional)
 
-### SimpleGrid (Container)
-- Columns: string (e.g., "1fr 100px")
-- Rows: string (optional)
-- Gap: string (combined shorthand)
-- TemplateAreas: string (separated by |)
-- Horizontal: HorizontalAlignment Enum
-- AutoFlow: GridAutoFlow Enum
+You can define project-wide defaults for your grids using the SimpleGridOptions. This is useful for maintaining consistent spacing and alignment across your entire application without repeating parameters on every component.
 
-### SimpleGridItem (Element)
-- Area: string (assigned area name)
-- ColumnSpan: int (span count)
-- RowSpan: int (span count)
-- Horizontal: HorizontalAlignment (Self)
+### 1. Registration in Program.cs
+
+You can register the services in your Program.cs file.:
+
+Custom Global Defaults
+This allows you to override any property for all grids in your app.
+```csharp
+builder.Services.AddSimpleGrid(options => { options.HorizontalGap = "20px"; options.VerticalGap = "20px"; options.ItemHorizontalAlignment = HorizontalAlignment.Center; options.Columns = "1fr 1fr"; // All grids will default to 2 columns });
+```
+
+### 2. Priority Order
+
+The components follow a strict priority logic to determine which value to use:
+1. Local Parameter: Value set directly on the <SimpleGrid> or <SimpleGridItem> tag.
+2. Global Options: Value set in Program.cs via AddSimpleGrid.
+3. Library Defaults: Hardcoded fallbacks in the SimpleGridOptions class.
+
+---
+
+## API Reference
+#### SimpleGrid (Container)
+
+| Property | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| Columns | string | Options.Columns | Defines grid columns (e.g., "1fr 2fr"). |
+| Rows | string | "none" | Defines explicit grid rows. |
+| TemplateAreas| string | null | Named areas using &vert; as row separator. |
+| AutoFlow | GridAutoFlow| Row | Controls the auto-placement algorithm. |
+| AutoColumns | string | "auto" | Size of implicitly created columns. |
+| AutoRows | string | "auto" | Size of implicitly created rows. |
+| Gap | string | null | Shorthand for both Horizontal and Vertical gap. |
+| Width | string | "auto" | Width of the grid container. |
+| Height | string | "auto" | Height of the grid container. |
+| HorizontalAlignment | HorizontalAlignment | Start | Align grid content (justify-content). |
+| VerticalAlignment | VerticalAlignment | Stretch | Align items (align-items). |
+#### SimpleGridItem (Element)
+
+| Property | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| Area | string | "" | Name of the target grid area. |
+| Column | string | "auto" | Starting column position. |
+| Row | string | "auto" | Starting row position. |
+| ColumnSpan | int | 1 | Number of columns to span. |
+| RowSpan | int | 1 | Number of rows to span. |
+| HorizontalAlignment | HorizontalAlignment | Stretch | justify-self. |
+| VerticalAlignment | VerticalAlignment | Stretch | align-self. |
 
 ---
 
